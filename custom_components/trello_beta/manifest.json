@@ -4,6 +4,7 @@
   "codeowners": ["@scottg489"],
   "config_flow": true,
   "documentation": "https://www.home-assistant.io/integrations/trello",
+  "issue_tracker": "https://github.com/ScottG489/ha-trello-beta/issues",
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "loggers": ["trello_beta"],
