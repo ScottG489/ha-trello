@@ -1,0 +1,25 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "invalid_auth": "Invalid authentication",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "boards": {
+                "data": {
+                    "board_ids": "Board names"
+                }
+            },
+            "creds": {
+                "data": {
+                    "api_key": "API Key",
+                    "api_token": "API Token"
+                }
+            },
+            "user": {}
+        }
+    }
+}
