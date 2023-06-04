@@ -2,7 +2,7 @@
 import logging
 from typing import Final
 
-DOMAIN: Final = "trello"
+DOMAIN: Final = "trello_beta"
 
 LOGGER = logging.getLogger(__package__)
 
