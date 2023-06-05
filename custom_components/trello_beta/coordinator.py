@@ -24,7 +24,7 @@ class TrelloDataUpdateCoordinator(DataUpdateCoordinator[dict[str, int]]):
         super().__init__(
             hass=hass,
             logger=LOGGER,
-            name="trello",
+            name="trello_beta",
             update_interval=timedelta(seconds=15),
         )
         self.client = trello_client
