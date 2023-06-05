@@ -154,7 +154,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         self.ids_boards: dict[str, dict[str, str]] = {}
 
     async def async_step_init(
-            self, user_input: dict[str, Any] | None = None
+        self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Select desired boards to have card counts of per list.
 
@@ -168,26 +168,28 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
             return await self._show_board_form(configured_board_ids)
 
         await self._remove_deselected_boards(
-            configured_board_ids, user_input[USER_INPUT_BOARD_IDS]
+            configured_board_ids, user_input[CONF_BOARD_IDS]
         )
 
         user_selected_boards = await self._get_boards_lists(
-            user_input[USER_INPUT_BOARD_IDS]
+            user_input[CONF_BOARD_IDS]
         )
 
         new_config_options = {CONF_OPTIONS_BOARDS: user_selected_boards}
         return self.async_create_entry(data=new_config_options)
 
-    async def _show_board_form(self, configured_board_ids: list[str]) -> FlowResult:
+    async def _show_board_form(
+        self, ids_boards: dict[str, dict[str, str]], configured_board_ids: list[str]
+    ) -> FlowResult:
         return self.async_show_form(
             step_id="init",
             data_schema=_get_board_select_schema(
-                self.ids_boards, list(configured_board_ids)
+                ids_boards, list(configured_board_ids)
             ),
         )
 
     async def _remove_deselected_boards(
-            self, configured_board_ids: list[str], user_selected_board_ids: list[str]
+        self, configured_board_ids: list[str], user_selected_board_ids: list[str]
     ) -> None:
         for configured_board_id in configured_board_ids:
             if configured_board_id not in user_selected_board_ids:
@@ -206,11 +208,16 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         )
 
 
-
 def _create_trello_adapter(api_key: str, api_token: str) -> TrelloAdapter:
     return TrelloAdapter(TrelloClient(api_key=api_key, api_secret=api_token))
 
 
-def _get_board_select_schema(boards: dict[str, dict]) -> Schema:
+def _get_board_select_schema(
+    boards: dict[str, dict], default: list[str] | None = None
+) -> Schema:
+    if default is None:
+        default = []
     options = {key: value["name"] for key, value in boards.items()}
-    return vol.Schema({vol.Required(CONF_BOARD_IDS): cv.multi_select(options)})
+    return vol.Schema(
+        {vol.Required(CONF_BOARD_IDS, default=default): cv.multi_select(options)}
+    )
