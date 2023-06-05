@@ -165,7 +165,7 @@ class OptionsFlowHandler(config_entries.OptionsFlow):
         if user_input is None:
             self.ids_boards = await self._fetch_all_boards()
 
-            return await self._show_board_form(configured_board_ids)
+            return await self._show_board_form(self.ids_boards, configured_board_ids)
 
         await self._remove_deselected_boards(
             configured_board_ids, user_input[CONF_BOARD_IDS]
