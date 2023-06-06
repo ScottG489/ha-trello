@@ -38,3 +38,20 @@ Before setting up this integration, you need to get credentials by creating an I
 After you have both your **API Key** and **Token** you can start the integration setup.
 
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=trello_beta)
+
+## Development
+Run the following to set up your development environment
+```shell
+python3 -m venv venv
+source venv/bin/activate
+pip3 install -r requirements_test.txt
+```
+To run Home Assistant with this integration loaded:
+```shell
+hass -c config
+```
+### Testing
+To run unit tests with coverage:
+```shell
+pytest tests --cov=custom_components.trello_beta --cov-report term-missing
+```
