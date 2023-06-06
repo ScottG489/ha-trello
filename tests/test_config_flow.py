@@ -5,7 +5,7 @@ from unittest.mock import Mock, patch
 from trello import Unauthorized
 
 from homeassistant import config_entries, data_entry_flow
-from custom_components.trello_beta.const import DOMAIN
+from custom_components.trello_ext.const import DOMAIN
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
 
@@ -53,10 +53,10 @@ async def test_flow_user(hass: HomeAssistant) -> None:
     )
 
     with patch(
-            "custom_components.trello_beta.config_flow.TrelloAdapter",
+            "custom_components.trello_ext.config_flow.TrelloAdapter",
             new=MockAdapter,
     ), patch(
-        "custom_components.trello_beta.async_setup_entry",
+        "custom_components.trello_ext.async_setup_entry",
         return_value=True,
     ):
         creds_result = await hass.config_entries.flow.async_configure(
@@ -92,16 +92,16 @@ async def test_flow_user(hass: HomeAssistant) -> None:
 async def test_options_flow(hass: HomeAssistant) -> None:
     """Test full options configuration flow."""
     entry = MockConfigEntry(
-        domain="trello_beta",
+        domain="trello_ext",
         data=USER_INPUT_CREDS,
         options={"boards": BOARD_ID_LISTS},
     )
     entry.add_to_hass(hass)
 
     with patch(
-        "custom_components.trello_beta.config_flow.TrelloAdapter",
+        "custom_components.trello_ext.config_flow.TrelloAdapter",
         new=MockAdapter,
-    ), patch("custom_components.trello_beta.async_setup_entry", return_value=True):
+    ), patch("custom_components.trello_ext.async_setup_entry", return_value=True):
         assert await hass.config_entries.async_setup(entry.entry_id)
         init_result = await hass.config_entries.options.async_init(entry.entry_id)
         await hass.async_block_till_done()
@@ -123,7 +123,7 @@ async def test_options_flow(hass: HomeAssistant) -> None:
 async def test_options_flow_remove_board(hass: HomeAssistant) -> None:
     """Test options flow when user deselects a previously selected board."""
     entry = MockConfigEntry(
-        domain="trello_beta",
+        domain="trello_ext",
         data=USER_INPUT_CREDS,
         options={"boards": BOARD_ID_LISTS},
         unique_id="a_unique_id",
@@ -131,12 +131,12 @@ async def test_options_flow_remove_board(hass: HomeAssistant) -> None:
     entry.add_to_hass(hass)
 
     with patch(
-        "custom_components.trello_beta.config_flow.TrelloAdapter",
+        "custom_components.trello_ext.config_flow.TrelloAdapter",
         new=MockAdapter,
     ), patch(
-        "custom_components.trello_beta.sensor.async_setup_entry", return_value=True
+        "custom_components.trello_ext.sensor.async_setup_entry", return_value=True
     ), patch(
-        "custom_components.trello_beta.config_flow.dr"
+        "custom_components.trello_ext.config_flow.dr"
     ) as device_registry:
         await hass.config_entries.async_setup(entry.entry_id)
         init_result = await hass.config_entries.options.async_init(entry.entry_id)
@@ -161,10 +161,10 @@ async def test_flow_user_unauthorized(hass: HomeAssistant) -> None:
     )
 
     with patch(
-        "custom_components.trello_beta.config_flow.TrelloAdapter.get_member",
+        "custom_components.trello_ext.config_flow.TrelloAdapter.get_member",
         side_effect=Unauthorized("", Mock(status=123)),
     ), patch(
-        "custom_components.trello_beta.async_setup_entry",
+        "custom_components.trello_ext.async_setup_entry",
         return_value=True,
     ):
         creds_result = await hass.config_entries.flow.async_configure(

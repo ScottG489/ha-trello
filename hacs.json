@@ -1,6 +1,6 @@
 {
-  "name": "Trello (beta)",
-  "filename": "trello_beta.zip",
+  "name": "Trello",
+  "filename": "trello_ext",
   "render_readme": true,
   "zip_release": true
 }

@@ -1,7 +1,7 @@
 """Test the trello config flow."""
 from unittest.mock import Mock, patch
 
-from custom_components.trello_beta.sensor import async_setup_entry
+from custom_components.trello_ext.sensor import async_setup_entry
 from homeassistant.core import HomeAssistant
 
 from tests import BOARD_LISTS
@@ -24,10 +24,10 @@ async def test_sensor_setup_entry(hass: HomeAssistant) -> None:
     )
     mock_add_entities = Mock(options={"boards": []})
 
-    with patch("custom_components.trello_beta.sensor.TrelloClient"), patch(
-        "custom_components.trello_beta.sensor.TrelloSensor"
+    with patch("custom_components.trello_ext.sensor.TrelloClient"), patch(
+        "custom_components.trello_ext.sensor.TrelloSensor"
     ) as mock_trello_sensor, patch(
-        "custom_components.trello_beta.sensor.TrelloDataUpdateCoordinator",
+        "custom_components.trello_ext.sensor.TrelloDataUpdateCoordinator",
         autospec=True,
     ):
         await async_setup_entry(hass, mock_config_entry, mock_add_entities)
@@ -47,8 +47,8 @@ async def test_empty_sensor_setup_entry(hass: HomeAssistant) -> None:
     )
     mock_add_entities = Mock(options={"boards": []})
 
-    with patch("custom_components.trello_beta.sensor.TrelloClient"), patch(
-        "custom_components.trello_beta.sensor.TrelloDataUpdateCoordinator",
+    with patch("custom_components.trello_ext.sensor.TrelloClient"), patch(
+        "custom_components.trello_ext.sensor.TrelloDataUpdateCoordinator",
         autospec=True,
     ):
         await async_setup_entry(hass, mock_config_entry, mock_add_entities)

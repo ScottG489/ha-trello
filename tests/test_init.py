@@ -1,7 +1,7 @@
 """Test the trello config flow."""
 from unittest.mock import Mock
 
-from custom_components.trello_beta import TrelloAdapter
+from custom_components.trello_ext import TrelloAdapter
 from homeassistant.core import HomeAssistant
 
 from tests import BOARD_LISTS

@@ -1,5 +1,5 @@
-# ha-trello-beta
-Trello integration for Home Assistant (beta version of core integration). Expect this integration to be update more frequently than the core integration, but also may be more unstable.
+# ha-trello-ext
+Trello integration for Home Assistant.
 
 ## Features
 - Sensors to track the number of cards in the lists on any Trello board.
@@ -8,7 +8,7 @@ Trello integration for Home Assistant (beta version of core integration). Expect
 - Services for creating, updating, and deleting cards, lists, and boards.
 - OAuth support ([as soon as Trello adds support for OAuth2](https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/#using-basic-oauth))
 - Moving to a push model rather than polling for improved responsiveness.
-- [Anything you'd like to request that this integration doesn't do!](https://github.com/ScottG489/ha-trello-beta/issues/new?assignees=&labels=Feature%2BRequest&projects=&template=feature_request.yaml)
+- [Anything you'd like to request that this integration doesn't do!](https://github.com/ScottG489/ha-trello-ext/issues/new?assignees=&labels=Feature%2BRequest&projects=&template=feature_request.yaml)
 
 ## Installation
 First add this repository [as a custom repository](https://hacs.xyz/docs/faq/custom_repositories/).
@@ -37,7 +37,7 @@ Before setting up this integration, you need to get credentials by creating an I
 
 After you have both your **API Key** and **Token** you can start the integration setup.
 
-[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=trello_beta)
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=trello_ext)
 
 ## Development
 Run the following to set up your development environment
@@ -53,5 +53,5 @@ hass -c config
 ### Testing
 To run unit tests with coverage:
 ```shell
-pytest tests --cov=custom_components.trello_beta --cov-report term-missing
+pytest tests --cov=custom_components.trello_ext --cov-report term-missing
 ```
