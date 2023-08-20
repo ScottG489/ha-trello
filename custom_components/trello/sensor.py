@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from trello import TrelloClient
 
+from homeassistant.components import webhook
 from homeassistant.components.sensor import SensorEntity, SensorStateClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
@@ -10,8 +11,9 @@ from homeassistant.helpers.device_registry import DeviceEntryType
 from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from aiohttp import web
 
-from .const import DOMAIN
+from .const import DOMAIN, LOGGER
 from .coordinator import TrelloDataUpdateCoordinator
 
 
@@ -48,6 +50,13 @@ class TrelloSensor(CoordinatorEntity[TrelloDataUpdateCoordinator], SensorEntity)
         self._attr_available = False
 
     @property
+    def extra_state_attributes(self):
+        """Return state attributes."""
+        return {
+            "list_id": self.list_id
+        }
+
+    @property
     def device_info(self) -> DeviceInfo:
         """Return the device info."""
         return DeviceInfo(
@@ -75,6 +84,14 @@ async def async_setup_entry(
     coordinator = TrelloDataUpdateCoordinator(hass, trello_client, list(boards.keys()))
     await coordinator.async_config_entry_first_refresh()
 
+    webhook_id = webhook.async_generate_id()
+    webhook_callback_url = webhook.async_generate_url(hass, webhook_id)
+    await hass.async_add_executor_job(create_trello_webhooks, webhook_callback_url, boards, trello_client)
+
+    webhook.async_register(
+        hass, DOMAIN, "Trello", webhook_id, async_handle_webhook
+    )
+
     async_add_entities(
         [
             TrelloSensor(board, list_, coordinator)
@@ -83,3 +100,16 @@ async def async_setup_entry(
         ],
         True,
     )
+
+
+async def async_handle_webhook(hass: HomeAssistant, webhook_id: str, request: web.Request):
+    body = await request.json()
+    return web.Response(status=web.HTTPNoContent.status_code)
+
+
+def create_trello_webhooks(webhook_url, boards, trello_client):
+    for board in boards.values():
+        try:
+            trello_client.create_hook(callback_url=webhook_url, id_model=board['id'], desc=f"Webhook for '{board['name']}' board.")
+        except Exception as ex:
+            LOGGER.error(ex)

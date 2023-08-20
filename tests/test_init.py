@@ -1,8 +1,11 @@
 """Test the trello config flow."""
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from custom_components.trello import TrelloAdapter
 from homeassistant.core import HomeAssistant
+from homeassistant.setup import async_setup_component
+from custom_components.trello_ext.const import DOMAIN
+from pytest_homeassistant_custom_component.common import MockConfigEntry
 
 from tests import BOARD_LISTS
 
@@ -122,6 +125,33 @@ async def test_flow_trello_adapter_get_board_lists_bad_response(
     )
 
     assert actual_boards == {BOARD_ID: BOARD_LISTS}
+
+
+async def test_async_supports_notification_id(hass: HomeAssistant):
+    """Test that notify.persistent_notification supports notification_id."""
+    await async_setup_component(hass, DOMAIN, {})
+    await hass.async_block_till_done()
+    hass.states.async_set('sensor.list', '', {'list_id': 'a_list_id'})
+
+    entry = MockConfigEntry(
+        domain="trello_ext",
+        data=USER_INPUT_CREDS,
+        options={"boards": BOARD_ID_LISTS},
+    )
+    entry.add_to_hass(hass)
+
+    service_data = {
+        "account": entry.entry_id,
+        "name": "a_card_name",
+        "list_entity_id": "sensor.list",
+    }
+    with patch("custom_components.trello_ext.TrelloAdapter.add_card") as mock_add_card:
+        await hass.services.async_call(
+            DOMAIN, 'add_card', service_data
+        )
+        await hass.async_block_till_done()
+
+    mock_add_card.assert_called_once_with("a_list_id", "a_card_name")
 
 
 def _get_mock_client():
