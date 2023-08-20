@@ -1,4 +1,6 @@
 # ha-trello-ext
+![maintenance-status](https://img.shields.io/badge/maintenance-active-brightgreen)
+
 Trello integration for Home Assistant.
 
 ## Features
@@ -9,6 +11,8 @@ Trello integration for Home Assistant.
 - OAuth support ([as soon as Trello adds support for OAuth2](https://developer.atlassian.com/cloud/trello/guides/rest-api/authorization/#using-basic-oauth))
 - Moving to a push model rather than polling for improved responsiveness.
 - [Anything you'd like to request that this integration doesn't do!](https://github.com/ScottG489/ha-trello-ext/issues/new?assignees=&labels=Feature%2BRequest&projects=&template=feature_request.yaml)
+
+
 
 ## Installation
 First add this repository [as a custom repository](https://hacs.xyz/docs/faq/custom_repositories/).
