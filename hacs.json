@@ -1,6 +1,6 @@
 {
   "name": "Trello",
-  "filename": "trello_ext",
+  "filename": "trello",
   "render_readme": true,
   "zip_release": true
 }

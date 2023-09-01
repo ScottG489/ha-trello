@@ -21,15 +21,15 @@ jobs:
         shell: "bash"
         run: |
           yq -i -o json '.version="${{ github.event.release.tag_name }}"' \
-            "${{ github.workspace }}/custom_components/trello_ext/manifest.json"
+            "${{ github.workspace }}/custom_components/trello/manifest.json"
 
       - name: "ZIP the integration directory"
         shell: "bash"
         run: |
-          cd "${{ github.workspace }}/custom_components/trello_ext"
-          zip trello_ext.zip -r ./
+          cd "${{ github.workspace }}/custom_components/trello"
+          zip trello.zip -r ./
 
       - name: "Upload the ZIP file to the release"
         uses: softprops/action-gh-release@v0.1.15
         with:
-          files: ${{ github.workspace }}/custom_components/trello_ext/trello_ext.zip
+          files: ${{ github.workspace }}/custom_components/trello/trello.zip
