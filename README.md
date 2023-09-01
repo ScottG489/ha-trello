@@ -41,7 +41,7 @@ Before setting up this integration, you need to get credentials by creating an I
 
 After you have both your **API Key** and **Token** you can start the integration setup.
 
-[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=trello_ext)
+[![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=trello)
 
 ## Development
 Run the following to set up your development environment
@@ -57,5 +57,5 @@ hass -c config
 ### Testing
 To run unit tests with coverage:
 ```shell
-pytest tests --cov=custom_components.trello_ext --cov-report term-missing
+pytest tests --cov=custom_components.trello --cov-report term-missing
 ```

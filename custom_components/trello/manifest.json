@@ -1,5 +1,5 @@
 {
-  "domain": "trello_ext",
+  "domain": "trello",
   "name": "Trello",
   "codeowners": ["@scottg489"],
   "config_flow": true,
@@ -7,7 +7,7 @@
   "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/ScottG489/ha-trello-ext/issues",
-  "loggers": ["trello_ext"],
+  "loggers": ["trello"],
   "requirements": ["py-trello==0.19.0"],
   "version": "0.0.0"
 }
