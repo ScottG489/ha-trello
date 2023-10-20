@@ -1,2 +1,2 @@
-homeassistant
+homeassistant==2023.10.3
 py-trello==0.19.0
