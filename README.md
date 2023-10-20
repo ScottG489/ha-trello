@@ -47,7 +47,6 @@ After you have both your **API Key** and **Token** you can start the integration
 Run the following to set up your development environment
 ```shell
 python3 -m venv venv
-pip3 install -r requirements_dev.txt
 pip3 install -r requirements_test.txt
 source venv/bin/activate
 ```
@@ -64,3 +63,7 @@ pytest tests --cov=custom_components.trello --cov-report term-missing
 ### Releasing
 [Create a new GitHub release](https://github.com/ScottG489/ha-trello/releases/new). The [release workflow](https://github.com/ScottG489/ha-trello/blob/master/.github/workflows/release.yaml) takes care of the rest.
 When finished, it will be available to download via HACS.
+
+### Troubleshooting
+Ensure pip is at the latest version:
+`pip3 install -r requirements_test.txt`
