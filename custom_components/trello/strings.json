@@ -10,7 +10,7 @@
       },
       "boards": {
         "data": {
-          "board_ids": "Board names"
+          "board_ids": "Boards"
         }
       }
     },
@@ -20,15 +20,6 @@
     "error": {
       "invalid_auth": "[%key:common::config_flow::error::invalid_auth%]",
       "unknown": "[%key:common::config_flow::error::unknown%]"
-    }
-  },
-  "options": {
-    "step": {
-      "init": {
-        "data": {
-          "board_ids": "Board names"
-        }
-      }
     }
   }
 }
