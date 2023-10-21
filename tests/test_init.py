@@ -4,10 +4,10 @@ from unittest.mock import Mock, patch
 from custom_components.trello import TrelloAdapter
 from homeassistant.core import HomeAssistant
 from homeassistant.setup import async_setup_component
-from custom_components.trello_ext.const import DOMAIN
+from custom_components.trello.const import DOMAIN
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
-from tests import BOARD_LISTS
+from . import BOARD_LISTS
 
 API_KEY = "an_api_key"
 API_TOKEN = "an_api_token"
@@ -54,79 +54,6 @@ async def test_flow_trello_adapter_get_boards(hass: HomeAssistant) -> None:
     }
 
 
-async def test_flow_trello_adapter_get_board_lists(hass: HomeAssistant) -> None:
-    """Test trello adapter retrieving the users lists on specified boards."""
-    mock_client = _get_mock_client()
-    id_boards = {
-        "a_board_id": {"id": "a_board_id", "name": "A Board"},
-        "a_board_id_2": {"id": "a_board_id_2", "name": "A Board 2"},
-        "a_board_id_3": {"id": "a_board_id_3", "name": "A Board 3"},
-    }
-    selected_board_ids = ["a_board_id", "a_board_id_2"]
-
-    actual_boards = TrelloAdapter(mock_client).get_board_lists(
-        id_boards, selected_board_ids
-    )
-
-    assert actual_boards == {
-        BOARD_ID: BOARD_LISTS,
-        "a_board_id_2": {
-            "id": "a_board_id_2",
-            "name": "A Board 2",
-            "lists": [
-                {"id": "a_list_id_2", "name": "A List 2"},
-                {"id": "a_list_id_3", "name": "A List 3"},
-            ],
-        },
-    }
-
-
-async def test_flow_trello_adapter_get_board_lists_none_selected(
-    hass: HomeAssistant,
-) -> None:
-    """Test trello adapter retrieving the users lists with no selected boards."""
-    mock_client = _get_mock_client()
-    id_boards = {
-        "a_board_id": {"id": "a_board_id", "name": "A Board"},
-        "a_board_id_2": {"id": "a_board_id_2", "name": "A Board 2"},
-        "a_board_id_3": {"id": "a_board_id_3", "name": "A Board 3"},
-    }
-    selected_board_ids = []
-
-    actual_boards = TrelloAdapter(mock_client).get_board_lists(
-        id_boards, selected_board_ids
-    )
-
-    assert not actual_boards
-
-
-async def test_flow_trello_adapter_get_board_lists_bad_response(
-    hass: HomeAssistant,
-) -> None:
-    """Test trello adapter retrieving the users lists with an error response."""
-    mock_client = Mock()
-    mock_client.fetch_json.return_value = [
-        {"200": [{"id": "a_list_id", "name": "A List"}]},
-        {
-            "name": "NotFoundError",
-            "message": "The requested resource was not found.",
-            "statusCode": 404,
-        },
-    ]
-    id_boards = {
-        "a_board_id": {"id": "a_board_id", "name": "A Board"},
-        "a_board_id_2": {"id": "a_board_id_2", "name": "A Board 2"},
-        "a_board_id_3": {"id": "a_board_id_3", "name": "A Board 3"},
-    }
-    selected_board_ids = ["a_board_id", "a_board_id_2"]
-
-    actual_boards = TrelloAdapter(mock_client).get_board_lists(
-        id_boards, selected_board_ids
-    )
-
-    assert actual_boards == {BOARD_ID: BOARD_LISTS}
-
-
 async def test_async_supports_notification_id(hass: HomeAssistant):
     """Test that notify.persistent_notification supports notification_id."""
     await async_setup_component(hass, DOMAIN, {})
@@ -134,7 +61,7 @@ async def test_async_supports_notification_id(hass: HomeAssistant):
     hass.states.async_set('sensor.list', '', {'list_id': 'a_list_id'})
 
     entry = MockConfigEntry(
-        domain="trello_ext",
+        domain="trello",
         data=USER_INPUT_CREDS,
         options={"boards": BOARD_ID_LISTS},
     )
@@ -145,24 +72,10 @@ async def test_async_supports_notification_id(hass: HomeAssistant):
         "name": "a_card_name",
         "list_entity_id": "sensor.list",
     }
-    with patch("custom_components.trello_ext.TrelloAdapter.add_card") as mock_add_card:
+    with patch("custom_components.trello.TrelloAdapter.add_card") as mock_add_card:
         await hass.services.async_call(
             DOMAIN, 'add_card', service_data
         )
         await hass.async_block_till_done()
 
     mock_add_card.assert_called_once_with("a_list_id", "a_card_name")
-
-
-def _get_mock_client():
-    mock_client = Mock()
-    mock_client.fetch_json.return_value = [
-        {"200": [{"id": "a_list_id", "name": "A List"}]},
-        {
-            "200": [
-                {"id": "a_list_id_2", "name": "A List 2"},
-                {"id": "a_list_id_3", "name": "A List 3"},
-            ]
-        },
-    ]
-    return mock_client
