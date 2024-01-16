@@ -47,8 +47,8 @@ After you have both your **API Key** and **Token** you can start the integration
 Run the following to set up your development environment
 ```shell
 python3 -m venv venv
-pip3 install -r requirements_test.txt
 source venv/bin/activate
+pip3 install -r requirements_test.txt
 ```
 To run Home Assistant with this integration loaded:
 ```shell
